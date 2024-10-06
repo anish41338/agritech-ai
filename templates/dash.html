@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crop Damage Dashboard</title>
+    <link rel="stylesheet" href="static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif; /* Font family for the entire body */
+        background-color: #f5f5f5; /* Light gray background for the page */
+        color: #333; /* Text color */
+        justify-content: center; /* Center align all text */
+        padding: 30px; /* Increased padding around the body */
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      #chart-container,
+      #monthly-chart-container {
+        justify-content: center;
+        width: 100%;
+        max-width: 800px; /* Set a maximum width for the chart */
+        margin: auto; /* Center the container */
+        padding: 20px; /* Add some padding */
+        border: 1px solid #ddd; /* Add border for visibility */
+        border-radius: 8px; /* Round the corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        height: 400px;
+      }
+
+      canvas {
+        width: 100% !important; /* Make the canvas responsive */
+        height: auto !important; /* Maintain aspect ratio */
+      }
+
+      button {
+        margin-right: 10px; /* Add space between buttons */
+        padding: 10px 15px; /* Add padding for better appearance */
+        font-size: 16px; /* Font size for buttons */
+        background-color: #4caf50; /* Green button */
+        color: white; /* White text */
+        border: none; /* No border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer on hover */
+      }
+
+      button:hover {
+        background-color: #45a049; /* Darker green on hover */
+      }
+
+      /* Dropdown styles */
+      select {
+        padding: 10px; /* Padding inside the dropdown */
+        margin: 10px 0; /* Space above and below the dropdown */
+        border: 1px solid #ccc; /* Light border */
+        border-radius: 4px; /* Rounded corners */
+        font-size: 16px; /* Font size for dropdown */
+        width: 100%; /* Full width of the container */
+        max-width: 300px; /* Max width for better layout */
+        cursor: pointer; /* Pointer on hover */
+      }
+
+      /* Label styles */
+      label {
+        font-weight: bold; /* Bold text for labels */
+        display: block; /* Make label a block element */
+        margin: 10px 0; /* Space above and below the label */
+      }
+
+      /* Additional responsiveness */
+      @media (max-width: 600px) {
+        #chart-container,
+        #monthly-chart-container {
+          width: 90%; /* Adjust chart container width for smaller screens */
+        }
+
+        button {
+          font-size: 14px; /* Smaller font size for buttons */
+          padding: 8px 12px; /* Adjust padding for buttons */
+        }
+
+        select {
+          font-size: 14px; /* Smaller font size for dropdowns */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Crop Damage Dashboard</h1>
+
+    <div>
+      <h2>Select Timeframe:</h2>
+      <button id="yearly">Yearly</button>
+      <button id="monthly">Monthly</button>
+      <!-- New button for monthly data -->
+    </div>
+
+    <div id="filter-options" style="display: none">
+      <h2 id="filter-title"></h2>
+      <label for="year-select" id="year-label" style="display: none">
+        Select Year:
+      </label>
+      <select id="year-select" style="display: none"></select>
+      <label for="month-select" id="month-label" style="display: none">
+        Select Month:
+      </label>
+      <select id="month-select" style="display: none"></select>
+      <button id="filter-button">Filter</button>
+    </div>
+
+    <div id="chart-container">
+      <canvas id="damageChart"></canvas>
+    </div>
+
+    <div id="monthly-chart-container" style="display: none">
+      <!-- New container for monthly data -->
+      <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <script>
+      const damageChartCtx = document
+        .getElementById("damageChart")
+        .getContext("2d");
+      const monthlyChartCtx = document
+        .getElementById("monthlyChart")
+        .getContext("2d");
+      let damageChart;
+      let monthlyChart;
+
+      // Populate year dropdown
+      function populateYearDropdown() {
+        const yearSelect = document.getElementById("year-select");
+        const currentYear = new Date().getFullYear();
+
+        for (let i = 2020; i <= currentYear; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          yearSelect.appendChild(option);
+        }
+      }
+
+      // Populate month dropdown
+      function populateMonthDropdown() {
+        const monthSelect = document.getElementById("month-select");
+        const months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        months.forEach((month, index) => {
+          const option = document.createElement("option");
+          option.value = index + 1; // 1-based index for months
+          option.textContent = month;
+          monthSelect.appendChild(option);
+        });
+      }
+
+      // Function to show joint bar chart for yearly data
+      function showChart(labels, damagedData, healthyData, title) {
+        if (damageChart) {
+          damageChart.destroy(); // Destroy existing chart if it exists
+        }
+
+        damageChart = new Chart(damageChartCtx, {
+          type: "bar", // Use bar chart for displaying data
+          data: {
+            labels: labels, // Months as X-axis labels
+            datasets: [
+              {
+                label: "Damaged Crops",
+                data: damagedData, // Damaged data values
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+              },
+              {
+                label: "Healthy Crops",
+                data: healthyData, // Healthy data values
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true, // Make the chart responsive
+            scales: {
+              y: {
+                beginAtZero: true, // Start Y-axis from 0
+              },
+            },
+          },
+        });
+      }
+
+      // Function to show joint bar chart for monthly data
+      function showMonthlyChart(labels, damagedData, healthyData, title) {
+        if (monthlyChart) {
+          monthlyChart.destroy(); // Destroy existing chart if it exists
+        }
+
+        monthlyChart = new Chart(monthlyChartCtx, {
+          type: "bar", // Use bar chart for displaying data
+          data: {
+            labels: labels, // Weeks as X-axis labels
+            datasets: [
+              {
+                label: "Damaged Crops",
+                data: damagedData, // Damaged data values
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+              },
+              {
+                label: "Healthy Crops",
+                data: healthyData, // Healthy data values
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true, // Make the chart responsive
+            scales: {
+              y: {
+                beginAtZero: true, // Start Y-axis from 0
+              },
+            },
+          },
+        });
+      }
+
+      // Event listener for the yearly button
+      document.getElementById("yearly").addEventListener("click", () => {
+        document.getElementById("filter-title").innerText = "Yearly Data";
+        document.getElementById("year-label").style.display = "block";
+        document.getElementById("year-select").style.display = "block";
+        document.getElementById("month-label").style.display = "none";
+        document.getElementById("month-select").style.display = "none";
+        document.getElementById("filter-options").style.display = "block";
+        document.getElementById("chart-container").style.display = "block";
+        document.getElementById("monthly-chart-container").style.display =
+          "none"; // Hide monthly chart
+      });
+
+      // Event listener for the monthly button
+      document.getElementById("monthly").addEventListener("click", () => {
+        document.getElementById("filter-title").innerText = "Monthly Data";
+        document.getElementById("year-label").style.display = "block";
+        document.getElementById("year-select").style.display = "block";
+        document.getElementById("month-label").style.display = "block"; // Show month label
+        document.getElementById("month-select").style.display = "block"; // Show month select
+        document.getElementById("filter-options").style.display = "block";
+        document.getElementById("chart-container").style.display = "none"; // Hide yearly chart
+        document.getElementById("monthly-chart-container").style.display =
+          "block"; // Show monthly chart
+      });
+
+      // Event listener for filter button
+      document.getElementById("filter-button").addEventListener("click", () => {
+        const selectedYear = document.getElementById("year-select").value;
+        const selectedMonth = document.getElementById("month-select").value;
+
+        if (
+          document.getElementById("monthly-chart-container").style.display ===
+          "block"
+        ) {
+          // If in monthly view, fetch monthly data
+          if (selectedYear && selectedMonth) {
+            fetchMonthlyData(selectedYear, selectedMonth); // Fetch monthly data
+          } else {
+            alert("Please select a valid year and month");
+          }
+        } else {
+          // Otherwise, fetch yearly data
+          if (selectedYear) {
+            fetchYearlyData(selectedYear); // Fetch yearly data
+          } else {
+            alert("Please select a valid year");
+          }
+        }
+      });
+
+      // Function to fetch yearly data from your backend
+      function fetchYearlyData(year) {
+        fetch(`/api/yearly_data?year=${year}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+            showChart(
+              data.labels,
+              data.damaged,
+              data.healthy,
+              `Crop Damage in ${year}`
+            );
+          })
+          .catch((error) =>
+            console.error("Error fetching yearly data:", error)
+          );
+      }
+
+      // Function to fetch monthly data from your backend
+      function fetchMonthlyData(year, month) {
+        fetch(`/api/monthly_data?year=${year}&month=${month}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+            showMonthlyChart(
+              data.labels,
+              data.damaged,
+              data.healthy,
+              `Crop Damage for ${data.month} ${year}`
+            );
+          })
+          .catch((error) =>
+            console.error("Error fetching monthly data:", error)
+          );
+      }
+
+      // Populate year dropdown on page load
+      window.onload = () => {
+        populateYearDropdown();
+        populateMonthDropdown(); // Populate month dropdown
+      };
+    </script>
+  </body>
+</html>

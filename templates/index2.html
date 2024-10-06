@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Monitoring System</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <h1>Upload Crop Image or Video</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="file">Choose Image or Video:</label>
+        <input type="file" id="file" name="file" accept="image/*,video/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Prediction Results:</h2>
+    <div class="container" style="text-align: left;">
+        <pre id="results"></pre>
+    </div>
+    <button><a style="color:#fff;" href="/weather">Check Weather</a></button>
+    <button><a style="color:#fff;" href="/dashboard">Go to Dashboard</a></button>
+
+
+    <script src="static/js/main2.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriVision | Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("{{url_for('static', filename='images/Background.jpg')}}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            filter: blur(3px);
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        header {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            padding: 10px 20px;
+        }
+
+        .logo img {
+            height: 90px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .main-content {
+            margin-top: 80px; /* Adjust margin if needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjust to ensure content fits */
+            position: relative;
+            z-index: 2;
+            padding: 20px; /* Add some padding */
+            box-sizing: border-box; /* Ensure padding is included in height */
+            overflow-y: auto; /* Allow scrolling if necessary */
+        }
+
+        .result-container {
+            display: flex; /* Flex for column layout */
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center align items horizontally */
+            max-width: 600px; /* Limit width */
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Darker background */
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            padding: 20px; /* Added padding */
+        }
+
+        .result-image {
+            max-width: 300px; /* Limit the image width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px; /* Space between image and text */
+        }
+
+        .result-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .result-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Center align text */
+        }
+
+        h2 {
+            font-size: 2rem; /* Reduced size */
+            margin-bottom: 0.5rem;
+            text-align: center; /* Center align text */
+        }
+
+        h3 {
+            font-size: 1.5rem; /* Reduced size */
+            margin: 0.5rem 0;
+            text-align: center; /* Center align text */
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff6f61; /* Changed button color */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #ff4f3d; /* Darker hover color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/images/AgriVision.png" alt="AgriVision Logo">
+        </div>
+        <nav>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    <div class="main-content">
+        <div class="result-container">
+            <div class="result-image">
+                <img src="{{ user_image }}" alt="Uploaded Image of User's Plant" loading="lazy">
+            </div>
+            <div class="result-info">
+                <a href="/" class="back-button">Upload Another Image</a>
+                <h2>Prediction Results:</h2>
+                <h3>Predicted Class: <span style="color: #ffcc00; font-weight: lighter;">{{ pred_output }}</span></h3>
+                <h3>Confidence: <span style="color: #ffcc00; font-weight: lighter;">{{ (confidence | round(2)) * 100 }}%</span></h3>
+                <h2>Treatment Solution:</h2>
+                <h3><span style="color: #ffcc00; font-weight: lighter;">{{ treatment }}</span></h3>
+                <h2>Disease Cause:</h2>
+                <h3><span style="color: #ffcc00; font-weight: lighter;">{{ cause }}</span></h3>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

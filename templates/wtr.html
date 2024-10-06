@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Weather App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #161616;
+    }
+
+    ::selection {
+      color: #fff;
+      background: #43affc;
+    }
+
+    .wrapper {
+      width: 600px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 7px 7px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .wrapper header {
+      display: flex;
+      font-size: 21px;
+      font-weight: 500;
+      color: #43affc;
+      padding: 16px 15px;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header i {
+      font-size: 0em;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .wrapper.active header i {
+      margin-left: 5px;
+      font-size: 30px;
+    }
+
+    .wrapper .input-part,
+    .wrapper.active .input-part {
+      margin: 20px 25px 30px;
+      display: block;
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .input-container > div {
+      margin-right: 10px;
+    }
+
+    .input-part .info-txt {
+      display: none;
+      font-size: 17px;
+      text-align: center;
+      padding: 12px 10px;
+      border-radius: 7px;
+      margin-bottom: 15px;
+    }
+    .input-part .info-txt.error {
+      color: #721c24;
+      display: block;
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+    }
+    .input-part .info-txt.pending {
+      color: #0c5460;
+      display: block;
+      background: #d1ecf1;
+      border: 1px solid #bee5eb;
+    }
+    .input-part :where(input, button) {
+      width: 100%;
+      height: 55px;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      border-radius: 7px;
+    }
+
+    .input-container input,
+    .input-container button,
+    .input-part input {
+      width: 100%;
+      height: 55px;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      border-radius: 7px;
+      text-align: center;
+      padding: 0 15px;
+      border: 1px solid #ccc;
+    }
+
+    .input-container p {
+      color: #5f656a;
+      font-weight: 300;
+    }
+
+    .input-container input:focus,
+    .input-container input:valid,
+    .input-part input:focus,
+    .input-part input:valid {
+      border: 2px solid #43affc;
+    }
+
+    .input-container input::placeholder,
+    .input-part input::placeholder {
+      color: #bfbfbf;
+    }
+
+    .input-container button,
+    .input-part button {
+      color: #fff;
+      cursor: pointer;
+      background: #43affc;
+      transition: 0.3s ease;
+      margin: 30px 25px 30px;
+      margin-left: 10px;
+    }
+
+    .input-container button:hover,
+    .input-part button:hover {
+      background: #1d9ffc;
+    }
+
+    .wrapper .weather-part,
+    .wrapper.active .weather-part {
+      display: none;
+      margin: 30px 0 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .wrapper.active .weather-part {
+      display: flex;
+    }
+
+    .weather-part img {
+      max-width: 125px;
+    }
+
+    .weather-part .temp {
+      display: flex;
+      font-weight: 500;
+      font-size: 72px;
+    }
+
+    .weather-part .temp .numb {
+      font-weight: 600;
+    }
+
+    .weather-part .temp .deg {
+      font-size: 40px;
+      display: block;
+      margin: 10px 5px 0 0;
+    }
+
+    .weather-part .weather {
+      font-size: 21px;
+      text-align: center;
+      margin: -5px 20px 15px;
+    }
+
+    .weather-part .location {
+      display: flex;
+      font-size: 19px;
+      padding: 0 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      align-items: flex-start;
+    }
+
+    .location i {
+      font-size: 22px;
+      margin: 4px 5px 0 0;
+    }
+
+    .weather-part .bottom-details {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      border-top: 1px solid #ccc;
+    }
+
+    .bottom-details .column {
+      display: flex;
+      width: 100%;
+      padding: 15px 0;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .column i {
+      color: #5dbbff;
+      font-size: 40px;
+    }
+
+    .column.humidity {
+      border-left: 1px solid #ccc;
+    }
+
+    .column .details {
+      margin-left: 3px;
+    }
+
+    .details .temp,
+    .humidity span {
+      font-size: 18px;
+      font-weight: 500;
+      margin-top: -3px;
+    }
+
+    .details .temp .deg {
+      margin: 0;
+      font-size: 17px;
+      padding: 0 2px 0 1px;
+    }
+
+    .column .details p {
+      font-size: 14px;
+      margin-top: -6px;
+    }
+
+    .humidity i {
+      font-size: 37px;
+    }
+  </style>
+  <body>
+    <div class="wrapper">
+      <header>Weather App</header>
+      <section class="input-part">
+        <p class="info-txt"></p>
+        <div class="content">
+          <div class="input-container">
+            <div>
+              <input
+                type="text"
+                spellcheck="false"
+                placeholder="Enter city name"
+                required
+              />
+            </div>
+            <p>OR</p>
+            <div>
+              <button>Get Device Location</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="weather-part">
+        <img src="" alt="Weather Icon" />
+        <div class="temp">
+            <span class="numb">_</span>
+            <span class="deg">°</span>C
+        </div>
+        <div class="weather">_ _</div>
+        <div class="location">
+            <i class="bx bx-map"></i>
+            <span>_, _</span>
+        </div>
+        <div class="bottom-details">
+            <div class="column feels">
+                <i class="bx bxs-thermometer"></i>
+                <div class="details">
+                    <div class="temp">
+                        <span class="numb-2">_</span>
+                        <span class="deg">°</span>C
+                    </div>
+                    <p>Feels like</p>
+                </div>
+            </div>
+            <div class="column humidity">
+                <i class="bx bxs-droplet-half"></i>
+                <div class="details">
+                    <span>_</span>
+                    <p>Humidity</p>
+                </div>
+            </div>
+        </div>
+        <div type="container" style="padding:10px;"><div class="suggestions" style="font-size: 20px;">
+          <p id="crop-advice"></p>
+      </div></div>
+    </section>
+    
+    </div>
+
+    <script>
+      const wrapper = document.querySelector(".wrapper"),
+        inputPart = document.querySelector(".input-part"),
+        infoTxt = inputPart.querySelector(".info-txt"),
+        inputField = inputPart.querySelector("input"),
+        locationBtn = inputPart.querySelector("button"),
+        weatherPart = wrapper.querySelector(".weather-part"),
+        wIcon = weatherPart.querySelector("img"),
+        arrowBack = wrapper.querySelector("header i");
+
+      let api;
+
+      inputField.addEventListener("keyup", (e) => {
+        if (e.key == "Enter" && inputField.value != "") {
+          requestApi(inputField.value);
+        }
+      });
+
+      locationBtn.addEventListener("click", () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+          alert("Your browser not support geolocation api");
+        }
+      });
+
+      function requestApi(city) {
+        api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=337423aed43ef4670d2ebbb0dfd2f930`;
+        fetchData();
+      }
+
+      function onSuccess(position) {
+        const { latitude, longitude } = position.coords;
+        api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=337423aed43ef4670d2ebbb0dfd2f930`;
+        fetchData();
+      }
+
+      function onError(error) {
+        infoTxt.innerText = error.message;
+        infoTxt.classList.add("error");
+      }
+
+      function fetchData() {
+        infoTxt.innerText = "Getting weather details...";
+        infoTxt.classList.add("pending");
+        fetch(api)
+          .then((res) => res.json())
+          .then((result) => weatherDetails(result))
+          .catch(() => {
+            infoTxt.innerText = "Something went wrong";
+            infoTxt.classList.replace("pending", "error");
+          });
+      }
+
+      function weatherDetails(info) {
+        if (info.cod == "404") {
+          infoTxt.classList.replace("pending", "error");
+          infoTxt.innerText = `${inputField.value} isn't a valid city name`;
+        } else {
+          const city = info.name;
+          const country = info.sys.country;
+          const { description, id } = info.weather[0];
+          const { temp, feels_like, humidity } = info.main;
+
+          const currentTime = new Date(); // Get the current time
+          const isDaytime = isDay(
+            currentTime,
+            info.sys.sunrise,
+            info.sys.sunset
+          );
+
+          const weatherIconSrc = getWeatherIcon(id, isDaytime);
+
+          wIcon.src = weatherIconSrc;
+          weatherPart.querySelector(".temp .numb").innerText = Math.floor(temp);
+          weatherPart.querySelector(".weather").innerText = description;
+          weatherPart.querySelector(
+            ".location span"
+          ).innerText = `${city}, ${country}`;
+          weatherPart.querySelector(".temp .numb-2").innerText =
+            Math.floor(feels_like);
+          weatherPart.querySelector(
+            ".humidity span"
+          ).innerText = `${humidity}%`;
+          infoTxt.classList.remove("pending", "error");
+          infoTxt.innerText = "";
+          inputField.value = "";
+          wrapper.classList.add("active");
+        }
+      }
+
+      function isDay(currentTime, sunrise, sunset) {
+        return (
+          currentTime >= new Date(sunrise * 1000) &&
+          currentTime < new Date(sunset * 1000)
+        );
+      }
+
+      function getWeatherIcon(weatherId, isDaytime) {
+        if (weatherId == 800) {
+          return isDaytime ? "static/icons/sunny.png" : "static/icons/crescent-moon.png";
+        } else if (weatherId >= 200 && weatherId <= 232) {
+          return isDaytime ? "static/icons/windy.png" : "static/icons/windy-night.png";
+        } else if (weatherId >= 600 && weatherId <= 622) {
+          return isDaytime ? "static/icons/snowflake.png" : "static/icons/snowfall.png";
+        } else if (weatherId >= 701 && weatherId <= 781) {
+          return isDaytime ? "static/icons/clear-sky.png" : "static/icons/night.png";
+        } else if (weatherId >= 801 && weatherId <= 804) {
+          return isDaytime ? "static/icons/cloudy-day.png" : "static/icons/cloud.png";
+        } else if (
+          (weatherId >= 500 && weatherId <= 531) ||
+          (weatherId >= 300 && weatherId <= 321)
+        ) {
+          return isDaytime ? "static/icons/rainy-day.png" : "static/icons/rainy.png";
+        }
+      }
+
+      function weatherDetails(info) {
+    if (info.cod == "404") {
+        infoTxt.classList.replace("pending", "error");
+        infoTxt.innerText = `${inputField.value} isn't a valid city name`;
+    } else {
+        const city = info.name;
+        const country = info.sys.country;
+        const { description, id } = info.weather[0];
+        const { temp, feels_like, humidity } = info.main;
+
+        const currentTime = new Date(); // Get the current time
+        const isDaytime = isDay(currentTime, info.sys.sunrise, info.sys.sunset);
+
+        const weatherIconSrc = getWeatherIcon(id, isDaytime);
+
+        wIcon.src = weatherIconSrc;
+        weatherPart.querySelector(".temp .numb").innerText = Math.floor(temp);
+        weatherPart.querySelector(".weather").innerText = description;
+        weatherPart.querySelector(".location span").innerText = `${city}, ${country}`;
+        weatherPart.querySelector(".temp .numb-2").innerText = Math.floor(feels_like);
+        weatherPart.querySelector(".humidity span").innerText = `${humidity}%`;
+
+        // Call the function to get crop care advice
+        displayCropAdvice(description);
+
+        infoTxt.classList.remove("pending", "error");
+        infoTxt.innerText = "";
+        inputField.value = "";
+        wrapper.classList.add("active");
+    }
+}
+
+// Function to display crop advice based on weather description
+function displayCropAdvice(weatherDescription) {
+    const cropAdvice = document.getElementById("crop-advice");
+    let advice;
+
+    switch (true) {
+        case /clear/i.test(weatherDescription):
+            advice = "Great day for watering crops and applying fertilizers!";
+            break;
+        case /cloud/i.test(weatherDescription):
+            advice = "Overcast skies can be beneficial. Monitor soil moisture.";
+            break;
+        case /rain/i.test(weatherDescription):
+            advice = "Expect rain. Ensure your crops are well-drained to prevent flooding.";
+            break;
+        case /storm/i.test(weatherDescription):
+            advice = "Prepare for stormy weather. Secure fragile crops and equipment.";
+            break;
+        case /snow/i.test(weatherDescription):
+            advice = "Snow can insulate crops but ensure they are not too exposed.";
+            break;
+        case /wind/i.test(weatherDescription):
+            advice = "Strong winds can damage crops. Consider protective measures.";
+            break;
+        default:
+            advice = "Monitor the weather conditions for better crop care.";
+            break;
+    }
+
+    cropAdvice.innerText = advice;
+}
+
+    </script>
+  </body>
+</html>
