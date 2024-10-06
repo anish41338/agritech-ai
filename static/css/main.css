@@ -1,0 +1,88 @@
+body {
+    background-image: url('{{url_for('static',filename = 'images/Background.jpg')}}');
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-top: 50px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.details h2 {
+    color: rgb(18, 231, 231);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+label:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+.upload {
+    font-size: 18px;
+    background-color: #fff;
+    border-radius: 20px;
+    outline: none;
+    width: 100%;
+    max-width: 400px;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(45, 47, 49);
+    padding: 10px;
+    margin-bottom: 20px;
+    transition: border 0.3s ease;
+}
+
+.upload:focus {
+    border-color: rgb(31, 185, 190);
+}
+
+::-webkit-file-upload-button {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgb(201, 6, 6);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+::-webkit-file-upload-button:hover {
+    background-color: rgb(177, 174, 174);
+}
+
+input[type="submit"] {
+    padding: 15px 30px;
+    background-color: rgb(31, 185, 190);
+    border-radius: 15px;
+    color: black;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(18, 231, 231);
+    transform: scale(1.05);
+}

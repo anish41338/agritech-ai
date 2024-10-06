@@ -1,0 +1,106 @@
+/* Reset some default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #fff; /* White background for the container */
+    padding: 30px; /* Increased padding for more spacing inside the container */
+    border: 1px solid #ddd; /* Light border around the container */
+    border-radius: 8px; /* Rounded corners for the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 800px; /* Increased max-width of the container */
+    margin: 30px auto; /* Center the container with margin */
+}
+
+body {
+    font-family: Arial, sans-serif; /* Font family for the entire body */
+    background-color: #f5f5f5; /* Light gray background for the page */
+    color: #333; /* Text color */
+    text-align: center; /* Center align all text */
+    padding: 30px; /* Increased padding around the body */
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    margin-bottom: 30px; /* Increased space below the main heading */
+    color: #4CAF50; /* Green color for the heading */
+    font-size: 36px; /* Increased font size for the main heading */
+}
+
+h2 {
+    margin-top: 40px; /* Increased space above the secondary heading */
+    margin-bottom: 25px; /* Increased space below the secondary heading */
+    font-size: 28px; /* Increased font size for the secondary heading */
+}
+
+/* Form styles */
+#upload-form {
+    background-color: #fff; /* White background for the form */
+    padding: 30px; /* Increased padding for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    max-width: 800px; /* Increased max-width */
+    margin: auto; /* Center the form */
+}
+
+label {
+    display: block; /* Block level for labels */
+    margin-bottom: 15px; /* Increased margin below labels */
+    font-weight: bold; /* Bold label text */
+    font-size: 18px; /* Increased font size for labels */
+}
+
+input[type="file"] {
+    margin-bottom: 30px; /* Increased margin below file input */
+    padding: 15px; /* Increased padding for file input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    width: 100%; /* Full width */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 16px; /* Increased font size for file input */
+}
+
+button {
+    background-color: #4CAF50; /* Green button */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 15px 30px; /* Increased padding for button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 18px; /* Increased font size */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Results section */
+#results {
+    background-color: #e7f3fe; /* Light blue background for results */
+    border: 1px solid #b8daff; /* Light blue border for results */
+    border-radius: 4px; /* Rounded corners for results */
+    padding: 15px; /* Increased padding inside the results area */
+    margin-top: 15px; /* Increased margin on top of the results area */
+    white-space: pre-wrap; /* Preserve formatting and allow wrapping */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font for code */
+    font-size: 16px; /* Increased font size for results */
+}
+
+/* Links */
+a {
+    display: inline-block; /* Inline-block for spacing */
+    margin-top: 15px; /* Increased margin on top of links */
+    text-decoration: none; /* Remove underline */
+    color: #4CAF50; /* Green color */
+    font-weight: bold; /* Bold links */
+    font-size: 18px; /* Increased font size for links */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
