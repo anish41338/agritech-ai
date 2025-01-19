@@ -1,5 +1,10 @@
 # 🌱 AgriVision: AI-Powered Real-Time Crop Health Monitoring 🌾
 
+<video width="640" height="360" controls>
+  <source src="folder/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 Welcome to **AgriVision**! This project was developed during the **Code Odyssey Hackathon** by **Team Synergy Squad** from **K J Somaiya Institute of Technology**. Our AI-powered solution aims to revolutionize agriculture by detecting crop diseases early and providing sustainable, eco-friendly interventions, leading to healthier crops and reduced chemical usage.
 
 ## 📋 Problem Statement
