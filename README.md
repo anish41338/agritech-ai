@@ -26,20 +26,21 @@ A smart AI-powered web app that detects plant diseases using a trained CNN model
 ---
 
 📊 Dashboard & Weather
-Real-time charts to monitor:
-Number of cases over time
-Disease categories per month/year
-Weather-based advisory shown on dashboard
-Threshold-based alerts possible (e.g. high temperature or humidity risks)
+-Real-time charts to monitor:
+-Number of cases over time
+-Disease categories per month/year
+-Weather-based advisory shown on dashboard
+-Threshold-based alerts possible (e.g. high temperature or humidity risks)
 ---
 📜 License
-MIT License
+-MIT License
 ---
 Run the Application
-python leaf.py
+:python leaf.py
 ---
 DOWNLOAD and INSTALL ALL REQUIREMENTS FROM requirements.txt
-👨‍💻 Developed By
-Anish Sihag
-Computer Science Student @ RV College of Engineering (RVCE)
+---
+👨‍💻 Developed By ;
+Anish Sihag /
+Computer Science Student @ RV College of Engineering (RVCE)/
 GitHub: anish41338
